@@ -69,8 +69,8 @@ a{color:inherit;text-decoration:none}
 /* nav ------------------------------------------------------- */
 .nav{position:fixed;inset:0 0 auto;z-index:60;transition:background .35s var(--ease),box-shadow .35s var(--ease)}
 .nav__in{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;min-height:80px;position:relative;z-index:1}
-/* No topo a nav flutua sobre o hero, e a metade direita dele e foto clara:
-   sem esta sombra, os links da direita sumiam contra a parede iluminada.
+/* No topo a nav flutua sobre a parede de placas do hero, que tem pedras claras
+   entre as escuras: sem esta sombra os links sumiam ao calhar sobre uma clara.
    Assim que a nav ganha fundo solido, a sombra sai de cena. */
 .nav::before{content:'';position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(rgba(9,32,42,.62),rgba(9,32,42,.22) 62%,rgba(9,32,42,0));
@@ -97,22 +97,43 @@ a{color:inherit;text-decoration:none}
 .gaveta .btn{font-family:var(--body);font-size:.95rem;margin-top:1.7rem;justify-self:start}
 body.travado{overflow:hidden}
 
-/* hero: metade navy, metade foto ---------------------------- */
+/* hero: a parede se montando -------------------------------
+   A marca ja e um conjunto de quatro placas e uma parede de mosaico e feita
+   placa por placa, entao o hero monta uma. Ganho colateral: cada placa e
+   pequena, e o material de origem (limitado) fica nitido, em vez de uma foto
+   unica ampliada quase 2x. */
 .hero{position:relative;background:var(--navy);min-height:100svh;display:grid;
-  grid-template-columns:1.02fr .98fr;align-items:stretch;isolation:isolate}
-.hero__txt{display:grid;align-content:center;padding:clamp(7rem,13vh,9.5rem) clamp(1.5rem,4.5vw,4.5rem) clamp(3.5rem,7vw,5rem) var(--gut)}
-.hero .h1{color:var(--champ-2);max-width:15ch}
+  place-items:center;overflow:hidden;isolation:isolate}
+.hero__parede{position:absolute;inset:-2%;z-index:0;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(clamp(86px,10.5vw,176px),1fr));
+  grid-auto-rows:clamp(86px,10.5vw,176px);gap:clamp(3px,.45vw,7px);
+  align-content:center;justify-content:center}
+.pl{overflow:hidden;border-radius:1px;background:var(--navy-2);
+  opacity:0;transform:scale(.86);
+  animation:assenta .9s var(--ease) forwards;
+  animation-delay:calc(var(--i) * 42ms)}
+.pl img{width:100%;height:100%;object-fit:cover}
+@keyframes assenta{to{opacity:1;transform:none}}
+/* O veu abre no centro para o titulo respirar e fecha nas bordas, senao a
+   parede compete com o texto em vez de sustentar. */
+.hero__veu{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 54% 50% at 50% 48%,rgba(9,32,42,.95) 0%,rgba(9,32,42,.9) 32%,rgba(9,32,42,.6) 58%,rgba(9,32,42,.2) 80%,rgba(9,32,42,0) 100%),
+    linear-gradient(rgba(9,32,42,.62),rgba(9,32,42,.06) 26%,rgba(9,32,42,.06) 72%,rgba(9,32,42,.7))}
+.hero__centro{position:relative;z-index:2;display:grid;justify-items:center;text-align:center;
+  padding-block:clamp(7rem,14vh,10rem) clamp(5rem,9vh,7rem)}
+.hero .h1{color:var(--champ-2);max-width:19ch;
+  text-shadow:0 2px 30px rgba(6,20,27,.75),0 0 70px rgba(6,20,27,.5)}
 .hero .h1 em{font-style:italic;color:var(--champ)}
-.hero__sub{color:rgba(238,233,224,.78);font-size:clamp(1.02rem,.45vw + .92rem,1.16rem);
-  max-width:46ch;margin-top:1.6rem;line-height:1.7}
-.hero__foto{position:relative;overflow:hidden}
-.hero__foto img{width:100%;height:100%;object-fit:cover}
-.hero__foto::after{content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,rgba(16,56,72,.92) 0%,rgba(16,56,72,.34) 26%,rgba(16,56,72,0) 62%)}
-.hero__marcas{display:flex;flex-wrap:wrap;gap:.55rem 2rem;margin-top:2.6rem;
-  font-size:.82rem;letter-spacing:.11em;text-transform:uppercase;color:rgba(208,192,160,.94)}
-.hero__marcas span{display:flex;align-items:center;gap:.55rem}
-.hero__marcas span::before{content:'';width:5px;height:5px;background:var(--champ-3);flex:none}
+.hero__sub{color:rgba(240,235,226,.86);font-size:clamp(1.02rem,.45vw + .92rem,1.18rem);
+  max-width:52ch;margin-top:1.7rem;line-height:1.72;
+  text-shadow:0 1px 20px rgba(6,20,27,.8)}
+.hero__seta{position:absolute;z-index:2;bottom:clamp(1.4rem,3.5vh,2.6rem);left:50%;
+  translate:-50% 0;width:44px;height:44px;display:grid;place-items:center;
+  color:rgba(208,192,160,.7);transition:color .3s var(--ease)}
+.hero__seta:hover{color:var(--champ-2)}
+.hero__seta svg{width:22px;height:22px;animation:respira 2.6s var(--ease) infinite}
+@keyframes respira{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(6px);opacity:1}}
 
 /* faixa de provas ------------------------------------------- */
 .prova{background:var(--navy-2);border-block:1px solid var(--linha-esc)}
@@ -126,6 +147,31 @@ body.travado{overflow:hidden}
 .foto-l{position:relative}
 .foto-l img{width:100%;border-radius:2px;background:var(--papel-3)}
 .foto-l::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(26,31,34,.09);border-radius:2px}
+
+/* fita de nomes ---------------------------------------------
+   Duas trilhas em sentidos opostos: a de cima em serif carrega o nome da
+   pedra, a de baixo em caixa-baixa miuda carrega a aplicacao. O contraste de
+   escala entre elas e o que faz a faixa parecer composta e nao decorativa.
+   A mascara nas pontas evita o corte seco contra a margem. */
+.fita{background:var(--navy);color:var(--champ-2);overflow:hidden;
+  padding-block:clamp(1.5rem,2.8vw,2.3rem);display:grid;gap:.45rem;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.fita__t{display:flex;width:max-content}
+.fita__l{display:flex;list-style:none;width:max-content}
+.fita__t--a .fita__l{animation:corre 52s linear infinite}
+.fita__t--b .fita__l{animation:corre 52s linear infinite reverse}
+.fita__l li{display:flex;align-items:center;white-space:nowrap;
+  font-family:var(--display);font-size:clamp(1.3rem,2.6vw,2.15rem);line-height:1.14;
+  padding-inline:clamp(.9rem,1.8vw,1.5rem)}
+.fita__l li::after{content:'';width:6px;height:6px;margin-left:clamp(.9rem,1.8vw,1.5rem);
+  background:var(--champ-3);rotate:45deg;flex:none}
+.fita__l--mini li{font-family:var(--body);font-weight:300;
+  font-size:clamp(.72rem,1vw,.86rem);letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(208,192,160,.84)}
+.fita__l--mini li::after{width:4px;height:4px;background:rgba(168,145,107,.6)}
+@keyframes corre{to{transform:translateX(-50%)}}
+.fita:hover .fita__l{animation-play-state:paused}
 
 /* carrossel de pedras --------------------------------------- */
 .car{position:relative}
@@ -154,9 +200,11 @@ body.travado{overflow:hidden}
 .car__nav[disabled]{opacity:.3;cursor:default}
 
 /* galeria de ambientes -------------------------------------- */
+/* Grade regular de verdade: os dois cards grandes que havia aqui faziam a
+   sala de jantar e a de estar aparecerem maiores que as outras sem motivo,
+   e o olho lia como desalinho, nao como hierarquia. */
 .gal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(.7rem,1.4vw,1.05rem)}
 .gal figure{position:relative;overflow:hidden;border-radius:2px;background:var(--papel-3);aspect-ratio:1}
-.gal figure:nth-child(1),.gal figure:nth-child(6){grid-column:span 2;grid-row:span 2;aspect-ratio:1}
 .gal img{width:100%;height:100%;object-fit:cover;transition:transform 1.3s var(--ease)}
 .gal figure:hover img{transform:scale(1.045)}
 .gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:1rem 1.1rem;color:#fff;
@@ -165,6 +213,11 @@ body.travado{overflow:hidden}
 
 /* showroom -------------------------------------------------- */
 .show{background:var(--navy);color:var(--champ-2)}
+/* titulo em duas linhas, centralizado, e cada paragrafo em no maximo duas */
+.show__cab{justify-items:center;text-align:center;margin-inline:auto;max-width:none;gap:1.4rem}
+.show__cab .h2{max-width:16ch}
+.show__cab .corpo{max-width:none;display:grid;gap:1rem;justify-items:center}
+.show__cab .corpo p{max-width:62ch}
 .show__g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(.7rem,1.4vw,1rem);margin-top:clamp(2.4rem,4vw,3.4rem)}
 .show__g figure{overflow:hidden;border-radius:2px;background:var(--navy-2);aspect-ratio:3/4}
 .show__g figure:first-child{grid-column:span 2;aspect-ratio:3/2}
@@ -206,7 +259,11 @@ body.travado{overflow:hidden}
   background:var(--papel-2);border:1px solid var(--linha);border-radius:2px;padding:.85rem 1rem;min-height:50px;width:100%}
 .campo textarea{min-height:96px;resize:vertical}
 .campo input:focus,.campo select:focus,.campo textarea:focus{outline:none;border-color:var(--navy-3);background:var(--papel)}
-.mapa{border:0;width:100%;aspect-ratio:16/10;border-radius:2px;background:var(--papel-3);filter:grayscale(1) contrast(.95);transition:filter .5s var(--ease)}
+/* grayscale(1) num mapa claro do Google deixa a area quase branca e o mapa
+   parece nao ter carregado. Dessaturar pela metade mantem o tom sobrio da
+   pagina sem apagar ruas e quarteirao. */
+.mapa{border:0;width:100%;aspect-ratio:16/10;border-radius:2px;background:var(--papel-3);
+  filter:grayscale(.5) contrast(1.05) saturate(.9);transition:filter .5s var(--ease)}
 .mapa:hover{filter:none}
 
 /* rodape ---------------------------------------------------- */
@@ -237,14 +294,9 @@ body.travado{overflow:hidden}
 /* responsivo ------------------------------------------------ */
 @media (max-width:1000px){
   .nav__links{display:none}.burger{display:block}
-  .hero{grid-template-columns:1fr;min-height:auto}
-  .hero__txt{order:2;padding:clamp(2.8rem,7vw,4rem) var(--gut) clamp(3rem,7vw,4rem)}
-  .hero__foto{order:1;aspect-ratio:16/11;min-height:46svh}
-  .hero__foto::after{background:linear-gradient(0deg,rgba(16,56,72,.9) 0%,rgba(16,56,72,.2) 45%,rgba(16,56,72,.35) 100%)}
   .prova__g{grid-template-columns:1fr;gap:1.8rem}
   .duo,.contato__g{grid-template-columns:1fr;gap:2.2rem}
   .gal{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .gal figure:nth-child(1),.gal figure:nth-child(6){grid-column:span 2;grid-row:auto;aspect-ratio:16/11}
   .show__g{grid-template-columns:repeat(2,minmax(0,1fr))}
   .show__g figure:first-child{grid-column:span 2}
   .dep{grid-template-columns:1fr}
@@ -253,15 +305,22 @@ body.travado{overflow:hidden}
   .rodape__m{grid-column:1/-1}
 }
 @media (max-width:620px){
-  .hero .h1{font-size:clamp(2.1rem,9vw,2.9rem)}
-  .hero .acoes{flex-direction:column;align-items:stretch;max-width:23rem}
+  .hero .h1{font-size:clamp(2.05rem,8.4vw,2.8rem)}
+  .hero .h1 br{display:none}
+  .hero .acoes{flex-direction:column;align-items:stretch;width:100%;max-width:23rem}
   .hero .acoes .btn{width:100%}
-  .gal{grid-template-columns:1fr}
-  .gal figure,.gal figure:nth-child(1),.gal figure:nth-child(6){grid-column:auto;aspect-ratio:4/3}
+  /* no celular a parede vira fundo de textura, com placa menor e veu mais
+     fechado: com poucas colunas as placas grandes viravam manchas de cor */
+  .hero__veu{background:
+    radial-gradient(ellipse 92% 52% at 50% 47%,rgba(9,32,42,.95) 0%,rgba(9,32,42,.9) 44%,rgba(9,32,42,.7) 74%,rgba(9,32,42,.5) 100%),
+    linear-gradient(rgba(9,32,42,.78),rgba(9,32,42,.42) 40%,rgba(9,32,42,.86))}
+  .gal{grid-template-columns:repeat(2,minmax(0,1fr))}
   .corpo,.dep__c p,.faq p,.card__d{font-size:.95rem}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important}
+  *,*::before,*::after{animation-duration:.001ms !important;animation-delay:0ms !important;transition-duration:.001ms !important}
   [data-sobe]{opacity:1;transform:none}
+  /* sem a animacao, a placa precisa nascer assentada, senao a parede some */
+  .pl{opacity:1;transform:none}
 }

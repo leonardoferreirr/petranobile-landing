@@ -1,3 +1,5 @@
+| mobile | 100 | 100 | 100 | 100 |
+| desktop | 100 | 100 | 100 | 100 |
 # Petra Nobile — landing
 
 Landing de conversão para a **Petra Nobile**, fabricante de revestimentos em
@@ -59,9 +61,12 @@ Jost (corpo). Self-hosted, com `font-display: optional` para não gerar CLS.
 - **Todo CTA passa por `obrigado.html`.** A página dispara o evento de conversão
   e só então abre o WhatsApp. Link direto para `wa.me` sai do site sem deixar
   rastro de que o lead converteu.
-- **Hero em três tamanhos** (`hero-560/900/1400`). As fotos de origem são
-  pequenas, então cada pixel conta: servir 1400px para uma tela de 375px
-  custava LCP à toa.
+- **O hero é a parede se montando.** O logotipo já é um conjunto de quatro
+  placas, e uma parede de mosaico é feita placa por placa. As texturas são
+  reais, recortadas do próprio catálogo. Ganho colateral: como cada placa é
+  pequena, o material de origem (limitado, 450x450) fica nítido, em vez de uma
+  foto única ampliada quase 2x. Ficou mais leve que a foto que substituiu, e o
+  LCP mobile caiu de 2,4s para 0,9s.
 
 ## Gate
 
