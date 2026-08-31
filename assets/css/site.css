@@ -149,29 +149,37 @@ body.travado{overflow:hidden}
 .foto-l::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(26,31,34,.09);border-radius:2px}
 
 /* fita de nomes ---------------------------------------------
-   Duas trilhas em sentidos opostos: a de cima em serif carrega o nome da
-   pedra, a de baixo em caixa-baixa miuda carrega a aplicacao. O contraste de
-   escala entre elas e o que faz a faixa parecer composta e nao decorativa.
-   A mascara nas pontas evita o corte seco contra a margem. */
+   Emenda direta com o hero, entregando os tipos de pedra antes de qualquer
+   texto. A lista e duplicada e a animacao anda -50%: a emenda cai exatamente
+   sobre o inicio da copia, entao o laco e invisivel. A mascara nas pontas
+   evita o corte seco contra a margem. */
 .fita{background:var(--navy);color:var(--champ-2);overflow:hidden;
-  padding-block:clamp(1.5rem,2.8vw,2.3rem);display:grid;gap:.45rem;
+  padding-block:clamp(1.4rem,2.6vw,2.1rem);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .fita__t{display:flex;width:max-content}
-.fita__l{display:flex;list-style:none;width:max-content}
-.fita__t--a .fita__l{animation:corre 52s linear infinite}
-.fita__t--b .fita__l{animation:corre 52s linear infinite reverse}
+.fita__l{display:flex;list-style:none;width:max-content;animation:corre 52s linear infinite}
 .fita__l li{display:flex;align-items:center;white-space:nowrap;
   font-family:var(--display);font-size:clamp(1.3rem,2.6vw,2.15rem);line-height:1.14;
   padding-inline:clamp(.9rem,1.8vw,1.5rem)}
 .fita__l li::after{content:'';width:6px;height:6px;margin-left:clamp(.9rem,1.8vw,1.5rem);
   background:var(--champ-3);rotate:45deg;flex:none}
-.fita__l--mini li{font-family:var(--body);font-weight:300;
-  font-size:clamp(.72rem,1vw,.86rem);letter-spacing:.16em;text-transform:uppercase;
-  color:rgba(208,192,160,.84)}
-.fita__l--mini li::after{width:4px;height:4px;background:rgba(168,145,107,.6)}
 @keyframes corre{to{transform:translateX(-50%)}}
 .fita:hover .fita__l{animation-play-state:paused}
+
+/* vitrine do showroom ---------------------------------------
+   Mesma mecanica da fita, com fotos no lugar de palavras. Altura fixa e
+   largura automatica: cada foto entra na faixa na proporcao original, sem
+   corte, e a sequencia se le como percurso pelo showroom. */
+.vitrine{overflow:hidden;margin-top:clamp(2.4rem,4vw,3.4rem);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+.vitrine__t{display:flex;list-style:none;width:max-content;
+  gap:clamp(.7rem,1.4vw,1.1rem);animation:corre 46s linear infinite}
+.vitrine__t li{flex:none;height:clamp(190px,24vw,320px);border-radius:2px;
+  overflow:hidden;background:var(--navy-2)}
+.vitrine__t img{width:auto;height:100%;object-fit:cover;display:block}
+.vitrine:hover .vitrine__t{animation-play-state:paused}
 
 /* carrossel de pedras --------------------------------------- */
 .car{position:relative}
@@ -218,10 +226,6 @@ body.travado{overflow:hidden}
 .show__cab .h2{max-width:16ch}
 .show__cab .corpo{max-width:none;display:grid;gap:1rem;justify-items:center}
 .show__cab .corpo p{max-width:62ch}
-.show__g{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(.7rem,1.4vw,1rem);margin-top:clamp(2.4rem,4vw,3.4rem)}
-.show__g figure{overflow:hidden;border-radius:2px;background:var(--navy-2);aspect-ratio:3/4}
-.show__g figure:first-child{grid-column:span 2;aspect-ratio:3/2}
-.show__g img{width:100%;height:100%;object-fit:cover}
 
 /* depoimentos ----------------------------------------------- */
 .dep{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1rem,2vw,1.6rem)}
@@ -297,8 +301,6 @@ body.travado{overflow:hidden}
   .prova__g{grid-template-columns:1fr;gap:1.8rem}
   .duo,.contato__g{grid-template-columns:1fr;gap:2.2rem}
   .gal{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .show__g{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .show__g figure:first-child{grid-column:span 2}
   .dep{grid-template-columns:1fr}
   .car__nav{display:none}
   .rodape__t{grid-template-columns:1fr 1fr}
@@ -323,4 +325,5 @@ body.travado{overflow:hidden}
   [data-sobe]{opacity:1;transform:none}
   /* sem a animacao, a placa precisa nascer assentada, senao a parede some */
   .pl{opacity:1;transform:none}
+  .fita__l,.vitrine__t{animation:none}
 }

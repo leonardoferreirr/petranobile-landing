@@ -46,6 +46,19 @@ a{color:#D0C0A0}
 (function(){
   function q(k){ return new URLSearchParams(location.search).get(k) || ''; }
   var n = q('n'), t = q('t') || '';
+
+  // Servidor com URL limpa redireciona /obrigado.html para /obrigado, e ha
+  // quem descarte a query nesse pulo. O site guarda os mesmos dados no
+  // sessionStorage antes de sair, entao aqui eles sao recuperados e o lead
+  // nao chega no WhatsApp com a conversa em branco.
+  if (!n) {
+    try {
+      var g = JSON.parse(sessionStorage.getItem('pn_wa') || '{}');
+      n = g.n || ''; t = g.t || t;
+    } catch (e) {}
+  }
+  try { sessionStorage.removeItem('pn_wa'); } catch (e) {}
+
   var valido = n && /^[0-9]{10,15}$/.test(n);
   var alvo = valido ? ('https://wa.me/' + n + (t ? ('?text=' + encodeURIComponent(t)) : '')) : '';
 

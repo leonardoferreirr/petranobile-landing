@@ -7,12 +7,26 @@
 
   /* Todo CTA de WhatsApp passa por obrigado.html antes de abrir a conversa.
      A pagina intermediaria dispara o evento de conversao e so entao redireciona;
-     link direto pro wa.me sai do site sem deixar rastro de que o lead converteu. */
+     link direto pro wa.me sai do site sem deixar rastro de que o lead converteu.
+
+     A mensagem vai por dois caminhos, de proposito. A query e o caminho normal,
+     mas quem serve o site com URL limpa redireciona /obrigado.html para
+     /obrigado, e ha servidor que descarta a query nesse pulo -- o lead chega no
+     WhatsApp sem nada escrito, justamente o que o formulario existe pra evitar.
+     O sessionStorage sobrevive ao redirecionamento e cobre esse caso. */
   function ponte(msg) {
     return 'obrigado.html?n=' + NUM + '&t=' + encodeURIComponent(msg || MSG);
   }
+  /* Guardar no CLIQUE, nunca ao montar os href: o laco abaixo passa por todos
+     os CTAs, e gravar ali faria o ultimo link sobrescrever a mensagem de todos
+     os outros. O lead do showroom chegaria com a frase do rodape. */
+  function guarda(msg) {
+    try { sessionStorage.setItem('pn_wa', JSON.stringify({ n: NUM, t: msg || MSG })); } catch (e) {}
+  }
   document.querySelectorAll('[data-wa]').forEach(function (a) {
-    a.href = ponte(a.dataset.wa || '');
+    var msg = a.dataset.wa || '';
+    a.href = ponte(msg);
+    a.addEventListener('click', function () { guarda(msg); });
   });
 
   /* nav: fundo solido depois que sai do topo -------------------------------- */
@@ -134,6 +148,7 @@
       if (m2) texto += ' A area e de aproximadamente ' + m2 + ' m2.';
       if (obs) texto += ' ' + obs;
 
+      guarda(texto);
       location.href = ponte(texto);
     });
   }
