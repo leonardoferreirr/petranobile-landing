@@ -1,5 +1,3 @@
-| mobile | 100 | 100 | 100 | 100 |
-| desktop | 100 | 100 | 100 | 100 |
 # Petra Nobile — landing
 
 Landing de conversão para a **Petra Nobile**, fabricante de revestimentos em
@@ -56,8 +54,13 @@ Jost (corpo). Self-hosted, com `font-display: optional` para não gerar CLS.
 - **Véu dos cards é mais opaco do que parece necessário.** Ele foi calibrado
   para o pior caso, que é a Pedra São Tomé: foto quase branca com texto
   champanhe por cima. Medido: pior título 7,00:1, pior descrição 12,32:1.
-- **Nav tem sombra própria no topo.** A metade direita do hero é foto clara e os
-  links sumiam nela. A sombra sai de cena quando a nav ganha fundo sólido.
+- **Nav tem sombra própria no topo.** A parede do hero tem pedras claras entre
+  as escuras, e os links sumiam ao calhar sobre uma clara. A sombra sai de cena
+  quando a nav ganha fundo sólido.
+- **O mapa sempre carregou; o problema era o filtro.** `grayscale(1)` num mapa
+  claro do Google deixa a área quase branca e parece que não carregou. Está
+  dessaturado pela metade. A query também mudou: o endereço solto caía no
+  centroide do CEP em vez do ponto exato.
 - **Todo CTA passa por `obrigado.html`.** A página dispara o evento de conversão
   e só então abre o WhatsApp. Link direto para `wa.me` sai do site sem deixar
   rastro de que o lead converteu.
@@ -73,13 +76,17 @@ Jost (corpo). Self-hosted, com `font-display: optional` para não gerar CLS.
 Lighthouse com `--throttling-method=devtools` (o modo `simulate` é pessimista e
 infla o LCP em cerca de 9 pontos):
 
-| | perf | a11y | BP | SEO |
-|---|---|---|---|---|
-| mobile | 98 | 100 | 100 | 100 |
-| desktop | 100 | 100 | 100 | 100 |
+| | perf | a11y | BP | SEO | LCP |
+|---|---|---|---|---|---|
+| mobile | 100 | 100 | 100 | 100 | 0,9 s |
+| desktop | 100 | 100 | 100 | 100 | 0,1 s |
 
-Verificado em Chromium e WebKit, em desktop, tablet e mobile: 8 cards, nenhum
-com altura zero, nenhuma foto quebrada, sem overflow horizontal, zero erro de JS.
+CLS zero nos dois. Duas rodadas por formato, para descartar cold start.
+
+Verificado em Chromium e WebKit, em desktop, tablet e mobile: 36 placas todas
+assentadas, 8 cards sem altura zero, galeria medindo largura única (grade
+regular de verdade), nenhuma foto quebrada, sem overflow horizontal, zero erro
+de JS.
 
 ## A confirmar com o cliente
 
