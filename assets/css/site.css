@@ -45,6 +45,7 @@ a{color:inherit;text-decoration:none}
 .lead{font-size:clamp(1.05rem,.5vw + .94rem,1.2rem);color:var(--tinta-2);line-height:1.68;max-width:56ch}
 .cab{display:grid;gap:1.15rem;max-width:46ch}
 .cab--centro{justify-items:center;text-align:center;margin-inline:auto;max-width:60ch}
+.h2--duas{max-width:none}
 .corpo{color:var(--tinta-2)}.corpo p + p{margin-top:1.05rem}
 .esc .h2,.esc .h3{color:var(--champ-2)}
 .esc .lead,.esc .corpo{color:rgba(240,236,228,.76)}
@@ -128,19 +129,7 @@ body.travado{overflow:hidden}
 .hero__sub{color:rgba(240,235,226,.86);font-size:clamp(1.02rem,.45vw + .92rem,1.18rem);
   max-width:52ch;margin-top:1.7rem;line-height:1.72;
   text-shadow:0 1px 20px rgba(6,20,27,.8)}
-.hero__seta{position:absolute;z-index:2;bottom:clamp(1.4rem,3.5vh,2.6rem);left:50%;
-  translate:-50% 0;width:44px;height:44px;display:grid;place-items:center;
-  color:rgba(208,192,160,.7);transition:color .3s var(--ease)}
-.hero__seta:hover{color:var(--champ-2)}
-.hero__seta svg{width:22px;height:22px;animation:respira 2.6s var(--ease) infinite}
-@keyframes respira{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(6px);opacity:1}}
 
-/* faixa de provas ------------------------------------------- */
-.prova{background:var(--navy-2);border-block:1px solid var(--linha-esc)}
-.prova__g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.6rem,3.5vw,3.2rem);padding-block:clamp(2.6rem,4.5vw,3.6rem)}
-.prova__i{display:grid;gap:.55rem;align-content:start}
-.prova__i .prova__h{font-family:var(--display);font-size:1.42rem;font-weight:400;line-height:1.2;color:var(--champ-2)}
-.prova__i p{font-size:.93rem;color:rgba(236,231,222,.68);line-height:1.62}
 
 /* marca / posicionamento ------------------------------------ */
 .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(2.2rem,5vw,5rem);align-items:center}
@@ -153,10 +142,16 @@ body.travado{overflow:hidden}
    texto. A lista e duplicada e a animacao anda -50%: a emenda cai exatamente
    sobre o inicio da copia, entao o laco e invisivel. A mascara nas pontas
    evita o corte seco contra a margem. */
-.fita{background:var(--navy);color:var(--champ-2);overflow:hidden;
-  padding-block:clamp(1.4rem,2.6vw,2.1rem);
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
-  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.fita{background:var(--navy);color:var(--champ-2);overflow:hidden;position:relative;
+  padding-block:clamp(1.4rem,2.6vw,2.1rem)}
+/* As pontas eram mascara, e mascara nao esmaece: ela FURA. O que aparecia nas
+   bordas era o creme da pagina atras, um claraozinho branco fora da paleta.
+   Agora sao duas camadas de azul mais claro por cima, entao o nome some para
+   dentro da propria faixa. */
+.fita::before,.fita::after{content:'';position:absolute;top:0;bottom:0;z-index:2;
+  width:clamp(56px,9vw,160px);pointer-events:none}
+.fita::before{left:0;background:linear-gradient(90deg,var(--navy-3) 12%,rgba(25,74,94,0))}
+.fita::after{right:0;background:linear-gradient(270deg,var(--navy-3) 12%,rgba(25,74,94,0))}
 .fita__t{display:flex;width:max-content}
 .fita__l{display:flex;list-style:none;width:max-content;animation:corre 52s linear infinite}
 .fita__l li{display:flex;align-items:center;white-space:nowrap;
@@ -298,7 +293,6 @@ body.travado{overflow:hidden}
 /* responsivo ------------------------------------------------ */
 @media (max-width:1000px){
   .nav__links{display:none}.burger{display:block}
-  .prova__g{grid-template-columns:1fr;gap:1.8rem}
   .duo,.contato__g{grid-template-columns:1fr;gap:2.2rem}
   .gal{grid-template-columns:repeat(2,minmax(0,1fr))}
   .dep{grid-template-columns:1fr}
@@ -308,7 +302,7 @@ body.travado{overflow:hidden}
 }
 @media (max-width:620px){
   .hero .h1{font-size:clamp(2.05rem,8.4vw,2.8rem)}
-  .hero .h1 br{display:none}
+  .hero .h1 br,.h2--duas br{display:none}
   .hero .acoes{flex-direction:column;align-items:stretch;width:100%;max-width:23rem}
   .hero .acoes .btn{width:100%}
   /* no celular a parede vira fundo de textura, com placa menor e veu mais
