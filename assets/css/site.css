@@ -116,14 +116,23 @@ body.travado{overflow:hidden}
 .pl img{width:100%;height:100%;object-fit:cover}
 @keyframes assenta{to{opacity:1;transform:none}}
 /* O veu abre no centro para o titulo respirar e fecha nas bordas, senao a
-   parede compete com o texto em vez de sustentar. */
+   parede compete com o texto em vez de sustentar.
+
+   A elipse foi de 54% para 62% quando o titulo passou a ocupar 1049px em vez
+   de 783px: as pontas da primeira linha sairam do nucleo escuro e caiam sobre
+   placa clara, com 1,73:1 de contraste. Escurecer mais que isso resolveria
+   tambem, mas apagaria a textura da parede, que e o produto. */
 .hero__veu{position:absolute;inset:0;z-index:1;pointer-events:none;
   background:
-    radial-gradient(ellipse 54% 50% at 50% 48%,rgba(9,32,42,.95) 0%,rgba(9,32,42,.9) 32%,rgba(9,32,42,.6) 58%,rgba(9,32,42,.2) 80%,rgba(9,32,42,0) 100%),
+    radial-gradient(ellipse 62% 52% at 50% 48%,rgba(9,32,42,.95) 0%,rgba(9,32,42,.92) 40%,rgba(9,32,42,.72) 64%,rgba(9,32,42,.28) 84%,rgba(9,32,42,0) 100%),
     linear-gradient(rgba(9,32,42,.62),rgba(9,32,42,.06) 26%,rgba(9,32,42,.06) 72%,rgba(9,32,42,.7))}
 .hero__centro{position:relative;z-index:2;display:grid;justify-items:center;text-align:center;
   padding-block:clamp(7rem,14vh,10rem) clamp(5rem,9vh,7rem)}
-.hero .h1{color:var(--champ-2);max-width:19ch;
+/* 26ch, nao 19ch: a primeira linha ("Revestimento em pedra natural,") tem 30
+   caracteres e nao cabia em 19ch, entao ela quebrava sozinha e o <br> seguinte
+   somava uma quarta linha, deixando "natural," orfa no meio do titulo. Com a
+   caixa larga o bastante, as tres quebras do markup sao as tres linhas. */
+.hero .h1{color:var(--champ-2);max-width:26ch;
   text-shadow:0 2px 30px rgba(6,20,27,.75),0 0 70px rgba(6,20,27,.5)}
 .hero .h1 em{font-style:italic;color:var(--champ)}
 .hero__sub{color:rgba(240,235,226,.86);font-size:clamp(1.02rem,.45vw + .92rem,1.18rem);
