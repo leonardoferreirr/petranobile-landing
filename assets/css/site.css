@@ -38,7 +38,13 @@ a{color:inherit;text-decoration:none}
 
 /* tipografia ------------------------------------------------ */
 .h1,.h2,.h3{font-family:var(--display);font-weight:400;line-height:1.06;letter-spacing:-.01em}
-.h1{font-size:clamp(2.7rem,6.4vw,5.4rem)}
+/* Teto de 4,75rem e nao 5,4rem por causa do font-display:optional. Quem chega
+   sem a fonte em cache renderiza a pagina inteira na fonte de fallback, que e
+   ~14% mais larga que a Cormorant. A 5,4rem a primeira linha do hero nao cabia
+   nos 1240px do container nessa metrica e o titulo ia para quatro linhas, so
+   para quem visitava pela primeira vez. O tamanho aqui e o que cabe na fonte
+   larga, nao o que cabe na fonte bonita. */
+.h1{font-size:clamp(2.7rem,6.4vw,4.75rem)}
 .h2{font-size:clamp(2.1rem,4.4vw,3.6rem);line-height:1.1}
 .h3{font-size:clamp(1.4rem,2vw,1.8rem);line-height:1.18}
 .it{font-style:italic}
@@ -118,21 +124,24 @@ body.travado{overflow:hidden}
 /* O veu abre no centro para o titulo respirar e fecha nas bordas, senao a
    parede compete com o texto em vez de sustentar.
 
-   A elipse foi de 54% para 62% quando o titulo passou a ocupar 1049px em vez
-   de 783px: as pontas da primeira linha sairam do nucleo escuro e caiam sobre
-   placa clara, com 1,73:1 de contraste. Escurecer mais que isso resolveria
-   tambem, mas apagaria a textura da parede, que e o produto. */
+   A elipse foi de 54% para 58% porque o titulo ficou mais largo que os 783px
+   para os quais o veu tinha sido calibrado, e as pontas da primeira linha
+   caiam sobre placa clara. Medido sob a letra: 54% da 2,49:1 (reprova), 58%
+   da 3,82:1, 62% da 6,31:1. Fica o 58%, o menor que passa: cada ponto a mais
+   apaga a textura da parede, que e o produto. */
 .hero__veu{position:absolute;inset:0;z-index:1;pointer-events:none;
   background:
-    radial-gradient(ellipse 62% 52% at 50% 48%,rgba(9,32,42,.95) 0%,rgba(9,32,42,.92) 40%,rgba(9,32,42,.72) 64%,rgba(9,32,42,.28) 84%,rgba(9,32,42,0) 100%),
+    radial-gradient(ellipse 58% 51% at 50% 48%,rgba(9,32,42,.95) 0%,rgba(9,32,42,.91) 36%,rgba(9,32,42,.66) 61%,rgba(9,32,42,.24) 82%,rgba(9,32,42,0) 100%),
     linear-gradient(rgba(9,32,42,.62),rgba(9,32,42,.06) 26%,rgba(9,32,42,.06) 72%,rgba(9,32,42,.7))}
 .hero__centro{position:relative;z-index:2;display:grid;justify-items:center;text-align:center;
   padding-block:clamp(7rem,14vh,10rem) clamp(5rem,9vh,7rem)}
 /* 26ch, nao 19ch: a primeira linha ("Revestimento em pedra natural,") tem 30
    caracteres e nao cabia em 19ch, entao ela quebrava sozinha e o <br> seguinte
    somava uma quarta linha, deixando "natural," orfa no meio do titulo. Com a
-   caixa larga o bastante, as tres quebras do markup sao as tres linhas. */
-.hero .h1{color:var(--champ-2);max-width:26ch;
+   caixa larga o bastante, as tres quebras do markup sao as tres linhas.
+   30ch e nao 26ch porque `ch` mede o "0" da fonte em uso: com a fonte de
+   fallback o valor muda, e 26ch deixava so 2% de folga sobre a frase. */
+.hero .h1{color:var(--champ-2);max-width:30ch;
   text-shadow:0 2px 30px rgba(6,20,27,.75),0 0 70px rgba(6,20,27,.5)}
 .hero .h1 em{font-style:italic;color:var(--champ)}
 .hero__sub{color:rgba(240,235,226,.86);font-size:clamp(1.02rem,.45vw + .92rem,1.18rem);
@@ -309,9 +318,14 @@ body.travado{overflow:hidden}
   .rodape__t{grid-template-columns:1fr 1fr}
   .rodape__m{grid-column:1/-1}
 }
-@media (max-width:620px){
-  .hero .h1{font-size:clamp(2.05rem,8.4vw,2.8rem)}
+/* O titulo larga as quebras fixas antes das outras regras de celular: entre
+   620 e 660px a primeira linha ainda nao cabia na fonte de fallback e o titulo
+   ia para quatro linhas. Solto, ele se acomoda em tres. */
+@media (max-width:660px){
+  .hero .h1{font-size:clamp(1.85rem,7.8vw,2.8rem)}
   .hero .h1 br,.h2--duas br{display:none}
+}
+@media (max-width:620px){
   .hero .acoes{flex-direction:column;align-items:stretch;width:100%;max-width:23rem}
   .hero .acoes .btn{width:100%}
   /* no celular a parede vira fundo de textura, com placa menor e veu mais
