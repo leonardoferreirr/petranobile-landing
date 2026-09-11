@@ -141,12 +141,14 @@
       var pedra = (d.get('pedra') || '').toString().trim();
       var m2 = (d.get('m2') || '').toString().trim();
       var obs = (d.get('obs') || '').toString().trim();
+      var cidade = (d.get('cidade') || '').toString().trim();
 
       var texto = 'Ola! Meu nome e ' + nome + ' e vim pelo site da Petra Nobile.';
       if (pedra && pedra !== 'Ainda não sei') texto += ' Tenho interesse em ' + pedra + '.';
       if (pedra === 'Ainda não sei') texto += ' Ainda nao sei qual pedra, gostaria de orientacao.';
       if (m2) texto += ' A area e de aproximadamente ' + m2 + ' m2.';
       if (obs) texto += ' ' + obs;
+      if (cidade) texto += ' A obra e em ' + cidade + '.';
 
       guarda(texto);
       location.href = ponte(texto);
