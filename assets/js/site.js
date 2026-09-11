@@ -3,7 +3,7 @@
   'use strict';
 
   var NUM = '5511967698486';
-  var MSG = 'Ola! Vim pelo site da Petra Nobile e quero um orcamento de revestimento em pedra natural.';
+  var MSG = 'Olá, te achei no Google e gostaria de um orçamento de pedra decorativa, pode me ajudar?';
 
   /* Todo CTA de WhatsApp passa por obrigado.html antes de abrir a conversa.
      A pagina intermediaria dispara o evento de conversao e so entao redireciona;
@@ -143,12 +143,17 @@
       var obs = (d.get('obs') || '').toString().trim();
       var cidade = (d.get('cidade') || '').toString().trim();
 
-      var texto = 'Ola! Meu nome e ' + nome + ' e vim pelo site da Petra Nobile.';
+      /* abre com a mesma frase de todos os CTAs, para a conversa comecar
+         igual em qualquer caminho, e so depois entrega o que a pessoa
+         preencheu, que e o motivo do formulario existir. */
+      var texto = MSG + ' Meu nome é ' + nome + '.';
       if (pedra && pedra !== 'Ainda não sei') texto += ' Tenho interesse em ' + pedra + '.';
-      if (pedra === 'Ainda não sei') texto += ' Ainda nao sei qual pedra, gostaria de orientacao.';
-      if (m2) texto += ' A area e de aproximadamente ' + m2 + ' m2.';
-      if (obs) texto += ' ' + obs;
-      if (cidade) texto += ' A obra e em ' + cidade + '.';
+      if (pedra === 'Ainda não sei') texto += ' Ainda não sei qual pedra, gostaria de orientação.';
+      if (m2) texto += ' A área é de aproximadamente ' + m2 + ' m².';
+      /* o que a pessoa digita costuma vir sem ponto final, e a frase seguinte
+         encostava nela ("Parede da sala A obra e em ..."). */
+      if (obs) texto += ' ' + obs + (/[.!?]$/.test(obs) ? '' : '.');
+      if (cidade) texto += ' A obra é em ' + cidade + '.';
 
       guarda(texto);
       location.href = ponte(texto);
