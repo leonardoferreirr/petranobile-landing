@@ -1,4 +1,4 @@
-/* PETRA NOBILE — comportamento da pagina */
+/* PEDRAS DECORATIVAS — comportamento da pagina */
 (function () {
   'use strict';
 

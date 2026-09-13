@@ -2,9 +2,16 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NMVF76DC');</script>
+<!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Abrindo o WhatsApp · Petra Nobile</title>
+<title>Abrindo o WhatsApp · Pedras Decorativas</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
 @font-face{font-family:'Cormorant';src:url('assets/fonts/cormorant-latin.woff2') format('woff2');font-weight:400;font-display:swap}
@@ -30,6 +37,10 @@ a{color:#D0C0A0}
 </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMVF76DC"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <div class="caixa">
   <svg class="los" viewBox="0 0 64 64" aria-hidden="true" fill="#D0C0A0">
     <rect x="8" y="8" width="21" height="21" rx="1.5"/>
@@ -38,7 +49,7 @@ a{color:#D0C0A0}
     <rect x="32" y="33" width="21" height="21" rx="1.5"/>
   </svg>
   <h1>Abrindo o seu <span class="it">WhatsApp</span></h1>
-  <p id="msg">Um instante, estamos levando você para a conversa com a Petra Nobile.</p>
+  <p id="msg">Um instante, estamos levando você para a conversa com a Pedras Decorativas.</p>
   <div class="giro" id="giro"></div>
   <div class="manual" id="manual"><a id="ir" href="#">Abrir a conversa</a></div>
 </div>
@@ -62,30 +73,35 @@ a{color:#D0C0A0}
   var valido = n && /^[0-9]{10,15}$/.test(n);
   var alvo = valido ? ('https://wa.me/' + n + (t ? ('?text=' + encodeURIComponent(t)) : '')) : '';
 
-  // evento de conversao: funciona quando houver GTM ou pixel, inofensivo sem
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({ event: 'whatsapp_click', destino: 'Petra Nobile' });
-
   var manual = document.getElementById('manual'), ir = document.getElementById('ir'),
       giro = document.getElementById('giro'), msg = document.getElementById('msg');
 
-  var partiu = false;
-  function vai(){ if (partiu) return; partiu = true; location.href = alvo; }
+  var partiu = false, tagOk = false, minimo = false;
+  function vai(){ if (partiu || !valido) return; partiu = true; location.href = alvo; }
+  function tenta(){ if (tagOk && minimo) vai(); }
 
-  // AO INSTALAR GTM/PIXEL AQUI, trocar a linha do redirecionamento por:
-  //   setTimeout(function(){ if (window.google_tag_manager) vai(); }, 1500);
-  //   setTimeout(vai, 2400);
-  // Motivo: sair da pagina mata o script que ainda nao rodou. Se a tag nao tiver
-  // carregado na hora do redirect, o clique nao e contado em lugar nenhum, e e
-  // pra contar esse clique que esta pagina existe. O teto de 2,4s garante que
-  // ninguem fique preso esperando uma tag que nunca vem.
+  // Evento de conversao. Sair da pagina mata a tag que ainda nao disparou, e e
+  // pra contar esse clique que esta pagina existe. Por isso o redirecionamento
+  // espera o eventCallback: o GTM so o chama depois que todas as tags ligadas
+  // ao evento dispararam (ou na hora, se nenhuma estiver ligada).
+  // O teto de 2,6s cobre GTM bloqueado por adblock: ai o callback nunca vem, e
+  // ninguem pode ficar preso esperando.
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'whatsapp_click', destino: 'Pedras Decorativas',
+    eventCallback: function(){ tagOk = true; tenta(); },
+    eventTimeout: 2000
+  });
+
   if (valido) {
     ir.href = alvo;
-    setTimeout(vai, 1500);
-    setTimeout(function(){ giro.style.display='none'; manual.style.display='block'; }, 3000);
+    // 0,9s de tela minima: sem isso, com a tag em cache, a pagina so pisca
+    setTimeout(function(){ minimo = true; tenta(); }, 900);
+    setTimeout(vai, 2600);
+    setTimeout(function(){ giro.style.display='none'; manual.style.display='block'; }, 3200);
   } else {
     giro.style.display='none';
-    msg.innerHTML = 'Nao conseguimos montar o link. Fale com a Petra Nobile pelo telefone ' +
+    msg.innerHTML = 'Não conseguimos montar o link. Fale com a Pedras Decorativas pelo telefone ' +
       '<a href="tel:+551143191505">(11) 4319-1505</a>.';
     manual.style.display='block';
     ir.textContent = 'Voltar ao site'; ir.href = 'index.html';

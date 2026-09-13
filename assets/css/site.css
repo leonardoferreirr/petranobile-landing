@@ -60,7 +60,9 @@ a{color:inherit;text-decoration:none}
    size-adjust la em cima as duas metricas coincidem, entao o tamanho aqui e o
    que cabe de fato, e nao uma margem de seguranca para a fonte larga. */
 .h1{font-size:clamp(2.7rem,6.4vw,4.75rem)}
-.h2{font-size:clamp(2.1rem,4.4vw,3.6rem);line-height:1.1}
+/* Piso de 2,25rem = o teto do titulo no celular: sem isso, de 661 a 818px o
+   tablet mostrava titulo menor que o do iPhone. Acima de 818px nada muda. */
+.h2{font-size:clamp(2.25rem,4.4vw,3.6rem);line-height:1.1}
 .h3{font-size:clamp(1.4rem,2vw,1.8rem);line-height:1.18}
 .it{font-style:italic}
 .lead{font-size:clamp(1.05rem,.5vw + .94rem,1.2rem);color:var(--tinta-2);line-height:1.68;max-width:56ch}
@@ -183,8 +185,9 @@ body.travado{overflow:hidden}
 /* Numa coluna de ~510px o titulo a 3,6rem quebra em tres linhas: a maior
    linha da frase sozinha mede mais que a coluna. 3,1rem e o corpo em que as
    duas secoes de duas colunas fecham em duas linhas. Vale so enquanto
-   existem duas colunas: no celular o titulo volta para a escala geral. */
-@media (min-width:661px){.duo .h2,.contato .h2{font-size:clamp(1.9rem,3.9vw,3.1rem)}}
+   existem duas colunas (acima de 1000px): abaixo disso o grid vira uma coluna
+   e o titulo volta para a escala geral, senao ficava menor que os outros. */
+@media (min-width:1001px){.duo .h2,.contato .h2{font-size:clamp(1.9rem,3.9vw,3.1rem)}}
 .foto-l{position:relative}
 .foto-l img{width:100%;border-radius:2px;background:var(--papel-3)}
 .foto-l::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(26,31,34,.09);border-radius:2px}
@@ -359,17 +362,47 @@ body.travado{overflow:hidden}
   .car__nav{display:none}
   .rodape__t{grid-template-columns:1fr 1fr}.dif__l{grid-template-columns:repeat(2,minmax(0,1fr))}
   .rodape__m{grid-column:1/-1}
+
+  /* Uma coluna so = tudo centralizado. Pedido do cliente: no celular havia
+     secao centralizada ao lado de secao alinhada a esquerda, e a pagina parecia
+     remendada. Ficam de fora o formulario e as perguntas frequentes: campo de
+     digitar e lista de abrir e fechar leem melhor alinhados a esquerda. */
+  .cab{justify-items:center;text-align:center}
+  .cab .acoes,.contato .acoes{justify-content:center}
+  .contato__g > div{text-align:center}
+  .contato .lead{margin-inline:auto}
+  .dados{justify-items:center}
+  .dados a,.dados div{flex-direction:column;align-items:center;gap:.45rem}
+  .dados svg{margin-top:0}
+  .dif__l li,.dep__c{text-align:center;justify-items:center}
+  .estrelas{justify-content:center}
+  .card__c,.gal figcaption{text-align:center}
+  .rodape__t{text-align:center;justify-items:center}
+  .rodape .marca,.rodape li a,.rodape li span,.rodape__b{justify-content:center}
+  .rodape__b{text-align:center}
 }
-/* No celular quem decide o numero de linhas e a largura da tela, nao a escala
-   de tipo: os 335px uteis de um iPhone SE cabem ~24 caracteres de Cormorant a
-   2,1rem. Abaixo de ~437px o titulo passa a acompanhar a largura da tela para
-   nao virar tres linhas; acima disso continua nos 2,1rem de sempre.
-   O hero usa 7,2vw e nao 7,8vw pelo mesmo motivo: a 7,8vw a primeira linha
-   ("Pedras naturais que valorizam") estourava por poucos pixels em 375px. */
+/* Titulos no celular: o maior corpo que ainda fecha em DUAS linhas.
+   O limite e a largura util da tela, nao a escala de tipo, entao o corpo e uma
+   fracao dessa largura: min(100vw - 2,5rem, 90vw) e exatamente a tela menos as
+   duas margens do .wrap. As fracoes sairam de medicao, nao de chute: para cada
+   titulo foi medido o maior corpo em 2 linhas, e a fracao fica ~3% abaixo do
+   titulo mais apertado da pagina ("A pedra certa para o resultado...").
+   Resultado: 35px num iPhone de 390px, contra 30px antes. Titulo novo com mais
+   de ~45 caracteres pode nao caber: medir antes de publicar. */
 @media (max-width:660px){
-  .hero .h1{font-size:clamp(1.5rem,7.2vw,2.8rem)}
-  .h2{font-size:clamp(1.4rem,7.7vw,2.1rem)}
+  .hero .h1{font-size:clamp(1.9rem,calc(min(100vw - 2.5rem,90vw) * .115),2.65rem)}
+  .h2{font-size:clamp(1.75rem,calc(min(100vw - 2.5rem,90vw) * .1),2.25rem)}
+  /* Botao sempre em uma linha (pedido do cliente). Mesma logica: o corpo acompanha
+     a tela, calibrado pelo rotulo mais longo ("Falar com a equipe da Pedras
+     Decorativas"). Da 14,7px num iPhone de 390px. */
+  .btn{white-space:nowrap;padding-inline:.85rem;gap:.5rem;
+    font-size:clamp(.8rem,calc(min(100vw - 2.5rem,90vw) * .042),.95rem)}
+  .btn svg{width:18px;height:18px}
+  /* o botao do formulario tem a caixa mais estreita da pagina */
+  .form{padding:1.1rem}
 }
+/* abaixo de 360px nao ha corpo legivel que caiba: ai o botao volta a quebrar */
+@media (max-width:359px){.btn{white-space:normal}}
 @media (max-width:620px){
   .hero .acoes{flex-direction:column;align-items:stretch;width:100%;max-width:23rem}
   .hero .acoes .btn{width:100%}
